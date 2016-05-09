@@ -4,9 +4,21 @@
 
 Venus is WRAL's system for capturing and digesting bills, sponsors and votes of the N.C. General Assembly. Powered by Django and data from the [Legiscan API](Legiscan API).
 
+Created by [Tyler Dukes](https://github.com/mtdukes), WRAL.
+
+## Setting up
+
+Clone repo and install requirements with ```pip```.
+
+```bash
+git clone https://github.com/wraldata/venus.git
+
+pip install -r requirements.txt
+```
+
 ## Current scripts
 
-A rundown of the scripts that manage data in Venus. Most of these can run in the crontab. Need to move these into Django utils. 
+A rundown of the scripts that manage data in Venus. Most of these can run in the crontab with ```sudo nano /etc/crontab```. Need to move these into Django utils. 
 
 Workflow:
 
@@ -15,7 +27,8 @@ Workflow:
 ```get_new_bills.py > loadBills.py > loadVotes.py > lawmakerStats.py```
 
 ### get_new_bills.py
-Checks the change hash in Legiscan and downloads new bill information and votes for every item that has changed into ```data``` directory.
+
+A python script to download a new Master File from the Legiscan API and check against our application's existing master file for any bill changes using the change hash. Currently checks for old file in ```data/master_file_old.json```.
 
 Usage:
 
@@ -25,7 +38,7 @@ python get_new_bills.py
 ```
 
 ### loadLawmakers.py
-Uses a centralized dataset of sitting North Carolina lawmakers maintained by WRAL to load new lawmakers into the database.
+Uses a centralized dataset of sitting North Carolina lawmakers maintained by WRAL to load new lawmakers into the database. Need to determine frequency to run this script in crontab.
 
 Usage:
 
@@ -45,7 +58,6 @@ Usage:
 export DJANGO_SETTINGS_MODULE=leg_tracker.settings
 
 python loadBills.py
-
 
 ```
 
@@ -107,3 +119,9 @@ python voteGen.py
 
 - [ ] Calculate "batting average" of sponsored bills passed
 - [ ] Show lawmaker tenure
+
+## LICENSE
+
+Released under [MIT license](https://github.com/wraldata/venus/blob/master/LICENSE)
+
+Venus flytrap icon by Daniel Gamage, [Noun Project](https://thenounproject.com/term/venus-flytrap/27589/)
