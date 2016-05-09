@@ -31,5 +31,3 @@ urlpatterns = [
     url(r'^', include(router.urls)),
 ]
 
-admin.site.site_header = 'My administration'
-
