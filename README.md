@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/wraldata/venus/master/leg_tracker/static/admin/img/venus_logo.png" width="75" style="float:left;">
+<img src="https://raw.githubusercontent.com/wraldata/venus/master/leg_tracker/static/admin/img/venus_logo.png" style="float:left;width:75px;">
 
 # Venus
 
