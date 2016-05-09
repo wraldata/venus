@@ -16,6 +16,8 @@ git clone https://github.com/wraldata/venus.git
 pip install -r requirements.txt
 ```
 
+Update database with ```git pull```.
+
 ## Current scripts
 
 A rundown of the scripts that manage data in Venus. Most of these can run in the crontab with ```sudo nano /etc/crontab```. Need to move these into Django utils. 
