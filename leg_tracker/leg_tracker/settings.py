@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = open(os.path.join(BASE_DIR,'../keys/.django_key'),'r').read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -87,10 +87,6 @@ TEMPLATES = [
         },
     },
 ]
-
-#TEMPLATE_DIRS = os.path.join(BASE_DIR, "templates/")
-
-#TEMPLATE_LOADERS = 'django.template.loaders.filesystem.Loader'
 
 WSGI_APPLICATION = 'leg_tracker.wsgi.application'
 

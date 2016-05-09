@@ -30,3 +30,7 @@ admin.site.register(Lawmaker, LawmakerAdmin)
 admin.site.register(Bill, BillAdmin)
 admin.site.register(Rollcall, RollcallAdmin)
 admin.site.register(Vote, VoteAdmin)
+
+# Tweak admin site settings like title, header, 'View Site' URL, etc
+admin.site.site_title = 'Venus administration'
+admin.site.site_header = 'Venus administration'
