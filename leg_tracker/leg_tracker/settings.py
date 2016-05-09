@@ -88,9 +88,9 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATE_DIRS = os.path.join(BASE_DIR, "templates/")
+#TEMPLATE_DIRS = os.path.join(BASE_DIR, "templates/")
 
-TEMPLATE_LOADERS = 'django.template.loaders.filesystem.Loader'
+#TEMPLATE_LOADERS = 'django.template.loaders.filesystem.Loader'
 
 WSGI_APPLICATION = 'leg_tracker.wsgi.application'
 
