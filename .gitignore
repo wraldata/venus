@@ -1,0 +1,10 @@
+#Ignore these directories
+#Files in keys and data also ignored, but file structure maintained
+/notes
+migrations/
+
+#ignore these files
+.DS_Store
+*.sqlite3
+*.pyc
+master_log.txt
