@@ -88,8 +88,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'leg_tracker.wsgi.application'
+TEMPLATE_DIRS = '/projectdir/templates/'
 
+TEMPLATE_LOADERS = 'django.template.loaders.filesystem.Loader'
+
+WSGI_APPLICATION = 'leg_tracker.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
