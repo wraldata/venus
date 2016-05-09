@@ -1,5 +1,4 @@
-![venus logo]
-(https://raw.githubusercontent.com/wraldata/venus/master/leg_tracker/static/admin/img/venus_logo.png)
+<img src="https://raw.githubusercontent.com/wraldata/venus/master/leg_tracker/static/admin/img/venus_logo.png" width="20">
 
 # Venus
 
