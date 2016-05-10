@@ -99,29 +99,6 @@ python voteGen.py
 
 ```
 
-### To-do list
-
-- [ ] Add watch field for rollcall votes
-- [ ] Make sure bill title is always replaced when there's a change
-- [ ] Prevent user from altering bill title
-- [ ] Make sure description isn't overwritten when there's a change, allowing user to customize
-- [ ] Differentiate between primary/co-sponsors by filtering for ```sponsor_type_id=1```
-- [ ] Create party model for generating stats and other information
-- [ ] Calculate party loyalty average for dems/gop
-- [ ] Calculate missed vote score for dems/gop
-- [ ] Add bill number to rollcall votes
-- [ ] Integrate scripts into Django util functions ([example](https://github.com/datadesk/django-for-data-analysis-nicar-2016))
-- [ ] Improve error handling and reporting
-- [ ] Add check for sitting lawmakers to check inactive members
-- [ ] Refactor.
-- [ ] Refactor.
-- [ ] REFACTOR.
-
-### Feature requests
-
-- [ ] Calculate "batting average" of sponsored bills passed
-- [ ] Show lawmaker tenure
-
 ## LICENSE
 
 Released under [MIT license](https://github.com/wraldata/venus/blob/master/LICENSE)
