@@ -1,10 +1,11 @@
 '''
-get_new_bills.py
-A python script to download a new Master File from the Legiscan API and check 
+getChanges.py
+A python script (version 2.0 of get_new_bills.py) to download a new Master File from the Legiscan API and check 
 against our application's existing master file for any bill changes.
 Currently checks for old file in data/master_file_old.json
+
 Usage:
-python get_new_bills.py
+python getChanges.py
 '''
 
 import urllib, json
@@ -20,54 +21,78 @@ ncleg_bill = 'http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=20
 #open a log for writing
 master_log = open('master_log.txt', 'a')
 
-#grab the most recent master file from legiscan
-def get_master():
-	master_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getMasterList&state=NC'
-	master_file = urllib.URLopener()
+#function to get session ids
+def get_sessionList():
+	session_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getSessionList&state=NC'
+	session_list = []
 	try:
-		master_file.retrieve(master_url, 'data/master_file.json')
+		session_data = urllib.urlopen(session_url).read()
+		session_json = json.loads(session_data)
+		for session in session_json['sessions']:
+			if session['year_start'] == 2015 or session['year_end'] == 2016:
+				session_list.append(session['session_id'])
+	except:
+		print 'ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now())
+	return session_list
+
+#define function to get master lists with specificed session ids
+def get_masters(session_list):
+	base_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getMasterList&id='
+	url_list = []
+	session_bills = {}
+	counter = 0
+	#get session ids and build list of urls
+	for session in session_list:
+		master_url = base_url + str(session)
+		url_list.append(master_url)
+	#read in master list with each session id
+	for url in url_list:
+		#open the url and load in the json
+		current_session = json.loads(urllib.urlopen(url).read())
+		for item in current_session['masterlist']:
+			if item != 'session':
+				#append to master list object
+				session_bills[counter] = current_session['masterlist'][item]
+				counter += 1
+	#save to master_file.json
+	try:
+		with open('data/master_file.json','w') as change_file:
+			json.dump(session_bills,change_file)
 		master_log.write('SUCCESS: Newest master file saved at ' + str(datetime.datetime.now()) + '\n')
 	except:
 		master_log.write('ERROR: Invalid master file URL recorded at ' + str(datetime.datetime.now()) + '\n')
 		return
 
-#check the change hash in the legiscan master file for any updated/newly introduced bills
-def get_updated_bills():
+#define function to get new bills and overwrite old ones
+def get_bill_updates():
 	#open the new file
 	with open('data/master_file.json') as data_file:
 		master_data = json.load(data_file)
-	#get the status of the json; run if OK
-	if master_data['status'] == 'OK':
-		master_log.write('JSON status OK at ' + str(datetime.datetime.now()) + '\n')
 
-		#open the old file
-		#need to build in exception for if it doesn't exist
-		with open('data/master_file_old.json') as old_file:
-			old_data = json.load(old_file)
+	#open the old file
+	#need to build in exception for if it doesn't exist
+	with open('data/master_file_old.json') as old_file:
+		old_data = json.load(old_file)
 
-		#initialize the counter
-		change_count = 0
-		#create empty list to store bills
-		changed_bills = []
+	#initialize the counter
+	change_count = 0
+	#create empty list to store bills
+	changed_bills = []
 
-		for new_item in master_data['masterlist']:
-			#don't count the 'session' id or you get a key error
-			#ignores old entries that don't appear in the new file
-			if new_item != 'session':
-				try:
-					#check for altered change_hash
-					if (master_data['masterlist'][new_item]['change_hash'] != old_data['masterlist'][new_item]['change_hash']):
-						change_count += 1
-						changed_bills.append(new_item)
-				except KeyError:
-					change_count += 1
-					changed_bills.append(new_item)
-		master_log.write('ALERT: ' + str(change_count) + ' bills have been updated\n')
-		for bill in changed_bills:
-			get_bill(master_data['masterlist'][bill]['bill_id'],master_data['masterlist'][bill]['number'])
-			get_rollcall(master_data['masterlist'][bill]['number'])
-	else:
-		master_log.write('JSON status ERROR at ' + str(datetime.datetime.now()) + '\n')
+	for item in master_data:
+		try:
+			#check for altered change_hash
+			if (master_data[item]['change_hash'] != old_data[item]['change_hash']):
+				change_count += 1
+				changed_bills.append(item)
+		#if it throws a key error, the bill is new, so add it
+		except KeyError:
+			change_count += 1
+			changed_bills.append(item)
+	master_log.write('ALERT: ' + str(change_count) + ' bills have been updated\n')
+	for bill in changed_bills:
+		get_bill(master_data[bill]['bill_id'],master_data[bill]['number'])
+		get_rollcall(master_data[bill]['number'])
 
 #function to get a specific bill, by defined id
 def get_bill(bill_id, name):
@@ -107,8 +132,8 @@ def get_rollcall(bill_name):
 
 if __name__ == '__main__':
 	#run the functions
-	get_master()
-	get_updated_bills()
+	get_masters(get_sessionList())
+	get_bill_updates()
 	master_log.write('Finished at ' + str(datetime.datetime.now()) + '\n')
 	master_log.write('= = = = = = = = = =\n')
 

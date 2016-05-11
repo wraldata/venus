@@ -28,7 +28,7 @@ Workflow:
 
 ```get_new_bills.py > loadBills.py > loadVotes.py > lawmakerStats.py```
 
-### get_new_bills.py
+### getChanges.py
 
 A python script to download a new Master File from the Legiscan API and check against our application's existing master file for any bill changes using the change hash. Currently checks for old file in ```data/master_file_old.json```.
 
