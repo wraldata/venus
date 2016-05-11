@@ -92,23 +92,23 @@ def get_bill_updates():
 	master_log.write('ALERT: ' + str(change_count) + ' bills have been updated\n')
 	for bill in changed_bills:
 		get_bill(master_data[bill]['bill_id'],master_data[bill]['number'])
-		get_rollcall(master_data[bill]['number'])
+		get_rollcall(master_data[bill]['bill_id'])
 
 #function to get a specific bill, by defined id
 def get_bill(bill_id, name):
 	bill_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getBill&id=' + str(bill_id)
 	bill_file = urllib.URLopener()
 	try:
-		bill_file.retrieve(bill_url, 'data/bills/' + name + '.json')
+		bill_file.retrieve(bill_url, 'data/bills/' + str(bill_id) + '.json')
 		master_log.write(name + ' data saved at ' + str(datetime.datetime.now()) + '\n')
 	except:
 		master_log.write('ERROR: Invalid bill file URL\n')
 		return
 
 #function to get role call details, by defined id
-def get_rollcall(bill_name):
-	#open downloaded bill json given bill_name
-	with open('data/bills/' + bill_name + '.json') as bill_file:
+def get_rollcall(bill_id):
+	#open downloaded bill json given bill_id
+	with open('data/bills/' + str(bill_id) + '.json') as bill_file:
 		bill_data = json.load(bill_file)
 	#define rollcall list variable
 	rollcall_list = []
