@@ -46,10 +46,11 @@ def load_bills(file_name):
 
 		#store all the sponsor lawmaker objects in an array
 		for sponsor in data['bill']['sponsors']:
-			try:
-				sponsor_names.append(Lawmaker.objects.get(legiscan_id=sponsor['people_id']))
-			except:
-				master_log.write("Error: The lawmaker " + sponsor['name'] + "'s ID not found at " + str(datetime.datetime.now()) + "\n")
+			if sponsor['sponsor_type_id'] == 1:
+				try:
+					sponsor_names.append(Lawmaker.objects.get(legiscan_id=sponsor['people_id']))
+				except:
+					master_log.write("Error: The lawmaker " + sponsor['name'] + "'s ID not found at " + str(datetime.datetime.now()) + "\n")
 
 		#create a new bill called _ to refer to it later
 		#if it exists, update it with the new information
