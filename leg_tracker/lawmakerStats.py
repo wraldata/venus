@@ -22,6 +22,12 @@ lawmaker_url = 'http://52.22.90.29/lawmakers/?format=json'
 #rollcall_url = 'http://52.22.90.29/rollcalls/?format=json&bill_identifier=3540'
 rollcall_url = 'http://52.22.90.29/rollcalls/?format=json'
 
+#global variables to be used in other calculations
+dem_missed = []
+gop_missed = []
+dem_loyalty = []
+gop_loyalty = []
+
 def calc_votes():
 	#load lawmaker data
 	lawmaker_response = urllib.urlopen(lawmaker_url)
@@ -30,10 +36,6 @@ def calc_votes():
 	gop_list = []
 	dem_record = {}
 	gop_record = {}
-	dem_missed = []
-	gop_missed = []
-	dem_loyalty = []
-	gop_loyalty = []
 
 	#create array of dem lawmakers and gop lawmakers
 	for lawmaker in lawmaker_data:
@@ -134,12 +136,12 @@ def calc_votes():
 	}
 	print dem_values['loyalty_avg']
 	print dem_values['missed_avg']
-	print gop_values['loyalty_avg']
-	print gop_values['missed_avg']
 	gop_values = {
 		'loyalty_avg' : calc_average(gop_loyalty),
 		'missed_avg' : calc_average(gop_missed)
 	}
+	print gop_values['loyalty_avg']
+	print gop_values['missed_avg']
 	_, created = Party.objects.update_or_create(
 		party_id = 0,
 		defaults = gop_values
