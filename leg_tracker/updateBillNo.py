@@ -36,7 +36,7 @@ for vote in rollcall_data:
 
 	print 'Bill number:' + bill_data['bill_number']
 
-	r = Rollcall.objects.get(rollcall_id=vote['url'].split('/')[-2])
+	r = Rollcall.objects.get(rollcall_id=vote['rollcall_id'])
 	r.bill_number = bill_data['bill_number']
 	r.save()
 
