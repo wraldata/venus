@@ -63,6 +63,7 @@ def load_bills(file_name):
 			'bill_summaries' : summary_base + data['bill']['bill_number'],
 			'last_action' : last_action,
 			'last_action_date' : action_date,
+			'sponsors':'',
 		}
 		_, created = Bill.objects.update_or_create(
 			bill_id = data['bill']['bill_id'],
