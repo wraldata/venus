@@ -24,6 +24,7 @@ router.register(r'bills', views.BillViewSet)
 router.register(r'lawmakers', views.LawmakerViewSet)
 router.register(r'votes', views.VoteViewSet)
 router.register(r'rollcalls', views.RollcallViewSet)
+router.register(r'partys', views.PartyViewSet)
 
 urlpatterns = [
     url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
