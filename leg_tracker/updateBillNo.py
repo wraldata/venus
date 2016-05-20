@@ -34,11 +34,17 @@ for vote in rollcall_data:
 	bill_response = urllib.urlopen(bill_url + '?format=json')
 	bill_data = json.loads(bill_response.read())
 
-	#get the bill number
 	print 'Bill number:' + bill_data['bill_number']
 
-	#update the rollcall data
+	#get the bill number
+	updated_values = {
+		'bill_number' : bill_data['bill_number']
+	}
 
-	#updated_values = {
-	#	'bill_number' :
-	#}
+	#update the rollcall data
+	pk_id = vote['url'].split('/')[-2]
+	console.log(pk_id)
+	#_, created = Rollcall.objects.update_or_create(
+	#	rollcall_id = pk_id,
+	#	defaults = updated_values
+	#)
