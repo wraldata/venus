@@ -49,6 +49,7 @@ class Vote(models.Model):
 
 class Rollcall(models.Model):
 	bill_identifier = models.ForeignKey(Bill)
+	bill_number = models.CharField(default='',max_length=5)
 	rollcall_id = models.CharField(max_length=15)
 	date = models.DateField('date of vote')
 	desc = models.CharField(max_length=100)
