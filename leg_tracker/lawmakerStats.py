@@ -15,7 +15,7 @@ import django
 django.setup()
 
 #load your models
-from billcatcher.models import Lawmaker
+from billcatcher.models import Lawmaker, Party
 
 lawmaker_url = 'http://52.22.90.29/lawmakers/?format=json'
 #for testing
@@ -30,6 +30,10 @@ def calc_votes():
 	gop_list = []
 	dem_record = {}
 	gop_record = {}
+	dem_missed = []
+	gop_missed = []
+	dem_loyalty = []
+	gop_loyalty = []
 
 	#create array of dem lawmakers and gop lawmakers
 	for lawmaker in lawmaker_data:
@@ -101,6 +105,14 @@ def calc_votes():
 						missed_votes += 1
 		print lawmaker['name'] + " votes: " + str(party_votes) + "/" + str(total_votes)
 		print lawmaker['name'] + " missed votes: " + str(missed_votes) + "/" + str(vote_opps)
+		
+		#add calculated values to dem/gop array so we can calculate party info later
+		if lawmaker['party'] == "D":
+			dem_missed.append(party_votes/total_votes)
+			dem_loyalty.append(missed_votes/vote_opps)
+		elif lawmaker['party'] == "R":
+			gop_missed.append(party_votes/total_votes)
+			gop_loyalty.append(missed_votes/vote_opps)
 
 		#provide values to update
 		updated_values = {
@@ -116,6 +128,30 @@ def calc_votes():
 			legiscan_id = pk_id,
 			defaults = updated_values
 		)
+	dem_values = {
+		'loyalty_avg' : calc_average(dem_missed)
+		'missed_avg' : calc_average(dem_missed)
+	}
+	gop_values = {
+		'loyalty_avg' : calc_average(gop_missed)
+		'missed_avg' : calc_average(gop_missed)
+	}
+	Party.objects.update_or_create(
+		party_id = 0
+		defaults = gop_values
+	)
+	Party.objects.update_or_create(
+		party_id = 1
+		defaults = dem_values
+	)
+
+def calc_average(values):
+	total = 0
+	count = 0
+	for value in values:
+		total += value
+		count += 1
+	return total/count
 
 if __name__ == '__main__':
 	calc_votes()
