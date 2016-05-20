@@ -130,6 +130,8 @@ def calc_votes():
 			legiscan_id = pk_id,
 			defaults = updated_values
 		)
+	print dem_loyalty
+	print dem_missed
 	dem_values = {
 		'loyalty_avg' : calc_average(dem_loyalty),
 		'missed_avg' : calc_average(dem_missed)
