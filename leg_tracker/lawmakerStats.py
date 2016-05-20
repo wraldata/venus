@@ -129,18 +129,22 @@ def calc_votes():
 			defaults = updated_values
 		)
 	dem_values = {
-		'loyalty_avg' : calc_average(dem_missed),
+		'loyalty_avg' : calc_average(dem_loyalty),
 		'missed_avg' : calc_average(dem_missed)
 	}
+	print dem_values['loyalty_avg']
+	print dem_values['missed_avg']
+	print gop_values['loyalty_avg']
+	print gop_values['missed_avg']
 	gop_values = {
-		'loyalty_avg' : calc_average(gop_missed),
+		'loyalty_avg' : calc_average(gop_loyalty),
 		'missed_avg' : calc_average(gop_missed)
 	}
-	Party.objects.update_or_create(
+	_, created = Party.objects.update_or_create(
 		party_id = 0,
 		defaults = gop_values
 	)
-	Party.objects.update_or_create(
+	_, created = Party.objects.update_or_create(
 		party_id = 1,
 		defaults = dem_values
 	)

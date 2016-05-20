@@ -29,6 +29,7 @@ class VoteAdmin(admin.ModelAdmin):
 
 class PartyAdmin(admin.ModelAdmin):
 	list_display = ['party_long']
+	readonly_fields = ('updated',)
 
 admin.site.register(Lawmaker, LawmakerAdmin)
 admin.site.register(Bill, BillAdmin)
