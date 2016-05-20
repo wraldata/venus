@@ -5,6 +5,7 @@ from .models import Lawmaker
 from .models import Bill
 from .models import Rollcall
 from .models import Vote
+from .models import Party
 
 class LawmakerAdmin(admin.ModelAdmin):
 	list_display = ['name','chamber','party','county_short']
@@ -26,10 +27,14 @@ class RollcallAdmin(admin.ModelAdmin):
 class VoteAdmin(admin.ModelAdmin):
 	list_display = ['member','vote_text']
 
+class PartyAdmin(admin.ModelAdmin):
+	list_display = ['party_long']
+
 admin.site.register(Lawmaker, LawmakerAdmin)
 admin.site.register(Bill, BillAdmin)
 admin.site.register(Rollcall, RollcallAdmin)
 admin.site.register(Vote, VoteAdmin)
+admin.site.register(Party, PartyAdmin)
 
 # Tweak admin site settings like title, header, 'View Site' URL, etc
 admin.site.site_title = 'Venus administration'
