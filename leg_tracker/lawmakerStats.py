@@ -106,17 +106,15 @@ def calc_votes():
 						vote_opps += 1
 						missed_votes += 1
 		print lawmaker['name'] + " votes: " + str(party_votes) + "/" + str(total_votes)
-		print party_votes/total_votes
 		print lawmaker['name'] + " missed votes: " + str(missed_votes) + "/" + str(vote_opps)
-		print missed_votes/vote_opps
 		
 		#add calculated values to dem/gop array so we can calculate party info later
 		if lawmaker['party'] == "D":
-			dem_missed.append(missed_votes/vote_opps)
-			dem_loyalty.append(party_votes/total_votes)
+			dem_missed.append(round(missed_votes/float(vote_opps)),1)
+			dem_loyalty.append(round(party_votes/float(total_votes)),1)
 		elif lawmaker['party'] == "R":
-			gop_missed.append(missed_votes/vote_opps)
-			gop_loyalty.append(party_votes/total_votes)
+			gop_missed.append(round(missed_votes/float(vote_opps)),1)
+			gop_loyalty.append(round(party_votes/float(total_votes)),1)
 
 		#provide values to update
 		updated_values = {
