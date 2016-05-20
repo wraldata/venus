@@ -110,11 +110,11 @@ def calc_votes():
 		
 		#add calculated values to dem/gop array so we can calculate party info later
 		if lawmaker['party'] == "D":
-			dem_missed.append(round(missed_votes/float(vote_opps),1))
-			dem_loyalty.append(round(party_votes/float(total_votes),1))
+			dem_missed.append(round(missed_votes/float(vote_opps),3))
+			dem_loyalty.append(round(party_votes/float(total_votes),3))
 		elif lawmaker['party'] == "R":
-			gop_missed.append(round(missed_votes/float(vote_opps),1))
-			gop_loyalty.append(round(party_votes/float(total_votes),1))
+			gop_missed.append(round(missed_votes/float(vote_opps),3))
+			gop_loyalty.append(round(party_votes/float(total_votes),3))
 
 		#provide values to update
 		updated_values = {
