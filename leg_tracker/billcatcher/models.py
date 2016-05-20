@@ -62,6 +62,17 @@ class Rollcall(models.Model):
 	votes = models.ManyToManyField(Vote)
 	updated = models.DateTimeField(auto_now=True)
 
+class Party(models.Model):
+	party_id = models.IntegerField(default=0, primary_key=True, help_text='Internal ID assigned by system')
+	party_short = models.CharField(max_length=1)
+	party_long = models.CharField(max_length=30)
+	def __str__(self):
+		return self.party_long
+	loyalty_avg = models.PercentField(default=0, help_text='Calculated loyalty average for all party members')
+	missed_avg = models.PercentField(default=0, help_text='Calculated missed vote percentage for all party members')
+	updated = models.DateTimeField(auto_now=True)
+
+
 
 
 

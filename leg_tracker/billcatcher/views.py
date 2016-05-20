@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework import filters, generics
-from billcatcher.models import Bill, Lawmaker, Vote, Rollcall
-from billcatcher.serializers import BillSerializer, LawmakerSerializer, VoteSerializer, RollcallSerializer
+from billcatcher.models import Bill, Lawmaker, Vote, Rollcall, Party
+from billcatcher.serializers import BillSerializer, LawmakerSerializer, VoteSerializer, RollcallSerializer, PartySerializer
 
 class BillViewSet(viewsets.ModelViewSet):
     queryset = Bill.objects.all()
@@ -24,3 +24,7 @@ class RollcallViewSet(viewsets.ModelViewSet):
     serializer_class = RollcallSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('bill_identifier','rollcall_id','desc','passed')
+
+class PartyViewSet(viewsets.ModelViewSet):
+    queryset = Party.objects.all()
+    serializer_class = PartySerializer
