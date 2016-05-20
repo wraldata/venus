@@ -130,20 +130,14 @@ def calc_votes():
 			legiscan_id = pk_id,
 			defaults = updated_values
 		)
-	print dem_loyalty
-	print dem_missed
 	dem_values = {
 		'loyalty_avg' : calc_average(dem_loyalty),
 		'missed_avg' : calc_average(dem_missed)
 	}
-	print dem_values['loyalty_avg']
-	print dem_values['missed_avg']
 	gop_values = {
 		'loyalty_avg' : calc_average(gop_loyalty),
 		'missed_avg' : calc_average(gop_missed)
 	}
-	print gop_values['loyalty_avg']
-	print gop_values['missed_avg']
 	_, created = Party.objects.update_or_create(
 		party_id = 0,
 		defaults = gop_values
