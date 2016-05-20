@@ -36,18 +36,11 @@ for vote in rollcall_data:
 
 	print 'Bill number:' + bill_data['bill_number']
 
-	r = Rollcall.objects.get(rollcall_id=vote['rollcall_id'])
-	r.bill_number = bill_data['bill_number']
-	r.save()
+	#r = Rollcall.objects.get(rollcall_id=vote['rollcall_id'])
+	#r.bill_number = bill_data['bill_number']
+	#r.save()
 
-	#get the bill number
-	#updated_values = {
-	#	'bill_number' : bill_data['bill_number']
-	#}
-
-	#update the rollcall data
-	#pk_id = vote['url'].split('/')[-2]
-	#_, created = Rollcall.objects.update_or_create(
-	#	rollcall_id = pk_id,
-	#	defaults = updated_values
-	#)
+	try:
+		Rollcall.objects.filter(rollcall_id=vote['rollcall_id']).update(bill_number=bill_data['bill_number'])
+	except:
+		print 'Error writing rollcall data on',vote['rollcall_id']
