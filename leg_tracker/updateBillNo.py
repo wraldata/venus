@@ -43,7 +43,7 @@ for vote in rollcall_data:
 
 	#update the rollcall data
 	pk_id = vote['url'].split('/')[-2]
-	console.log(pk_id)
+	print pk_id
 	#_, created = Rollcall.objects.update_or_create(
 	#	rollcall_id = pk_id,
 	#	defaults = updated_values
