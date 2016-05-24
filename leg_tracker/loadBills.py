@@ -54,7 +54,7 @@ def load_bills(file_name):
 
 		#create a new bill called _ to refer to it later
 		#if it exists, update it with the new information
-		#clear out the sponsors to all us to load most recent version
+		#clear out the sponsors to allow us to load most recent version
 		updated_values = {
 			'state_link' : data['bill']['state_link'],
 			'bill_number' : data['bill']['bill_number'],
@@ -64,7 +64,7 @@ def load_bills(file_name):
 			'bill_summaries' : summary_base + data['bill']['bill_number'],
 			'last_action' : last_action,
 			'last_action_date' : action_date,
-			'sponsors':'',
+			'sponsors':'[]',
 		}
 		try:
 			_, created = Bill.objects.update_or_create(
