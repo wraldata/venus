@@ -128,8 +128,6 @@ def calc_votes():
 				gop_loyalty.append(round(party_votes/float(total_votes),3))
 			else:
 				gop_loyalty.append(0)
-			#gop_missed.append(round(missed_votes/float(vote_opps),3))
-			#gop_loyalty.append(round(party_votes/float(total_votes),3))
 
 		#provide values to update
 		updated_values = {
