@@ -72,7 +72,7 @@ def load_bills(file_name):
 				defaults = updated_values
 			)
 		except:
-			print 'Error on :',bill_id,updated_values
+			print 'Error on :',data['bill']['bill_id'],updated_values
 		if created == True:
 			master_log.write('Bill created from ' + file_name + ' at ' + str(datetime.datetime.now()) + '\n')
 		else:
