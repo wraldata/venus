@@ -66,10 +66,13 @@ def load_bills(file_name):
 			'last_action_date' : action_date,
 			'sponsors':'',
 		}
-		_, created = Bill.objects.update_or_create(
-			bill_id = data['bill']['bill_id'],
-			defaults = updated_values
-		)
+		try:
+			_, created = Bill.objects.update_or_create(
+				bill_id = data['bill']['bill_id'],
+				defaults = updated_values
+			)
+		except:
+			print 'Error on :',updated_values
 		if created == True:
 			master_log.write('Bill created from ' + file_name + ' at ' + str(datetime.datetime.now()) + '\n')
 		else:
