@@ -65,17 +65,15 @@ def load_bills(file_name):
 			'last_action' : last_action,
 			'last_action_date' : action_date,
 		}
-		try:
-			_, created = Bill.objects.update_or_create(
-				bill_id = data['bill']['bill_id'],
-				defaults = updated_values
-			)
-		except:
-			print 'Error on :',data['bill']['bill_id']
+		_, created = Bill.objects.update_or_create(
+			bill_id = data['bill']['bill_id'],
+			defaults = updated_values
+		)
 		if created == True:
 			master_log.write('Bill created from ' + file_name + ' at ' + str(datetime.datetime.now()) + '\n')
 		else:
 			master_log.write('Bill updated from ' + file_name + ' at ' + str(datetime.datetime.now()) + '\n')
+		#clear out the sponsors in case they change
 		_.sponsors.clear()
 		#iterate through sponsor_names and add each Lawmaker object to the sponsors ManyToManyField
 		for name in sponsor_names:

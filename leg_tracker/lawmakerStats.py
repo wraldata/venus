@@ -109,12 +109,27 @@ def calc_votes():
 		print lawmaker['name'] + " missed votes: " + str(missed_votes) + "/" + str(vote_opps)
 		
 		#add calculated values to dem/gop array so we can calculate party info later
+		#check for zero values in denominator to prevent float errors
 		if lawmaker['party'] == "D":
-			dem_missed.append(round(missed_votes/float(vote_opps),3))
-			dem_loyalty.append(round(party_votes/float(total_votes),3))
+			if vote_opps != 0:
+				dem_missed.append(round(missed_votes/float(vote_opps),3))
+			else:
+				dem_missed.append(0)
+			if(total_votes != 0):
+				dem_loyalty.append(round(party_votes/float(total_votes),3))
+			else:
+				dem_loyalty.append(0)
 		elif lawmaker['party'] == "R":
-			gop_missed.append(round(missed_votes/float(vote_opps),3))
-			gop_loyalty.append(round(party_votes/float(total_votes),3))
+			if(vote_opps != 0):
+				gop_missed.append(round(missed_votes/float(vote_opps),3))
+			else:
+				gop_missed.append(0)
+			if(total_votes != 0):
+				gop_loyalty.append(round(party_votes/float(total_votes),3))
+			else:
+				gop_loyalty.append(0)
+			#gop_missed.append(round(missed_votes/float(vote_opps),3))
+			#gop_loyalty.append(round(party_votes/float(total_votes),3))
 
 		#provide values to update
 		updated_values = {
