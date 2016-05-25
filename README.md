@@ -2,7 +2,9 @@
 
 # Venus
 
-Venus is WRAL's system for capturing and digesting bills, sponsors and votes of the N.C. General Assembly. Powered by Django and data from the [Legiscan API](Legiscan API).
+Venus is WRAL's system for capturing and digesting bills, sponsors and votes of the N.C. General Assembly and serving them up for applications. Powered by Python, [Django](https://www.djangoproject.com/) and data from the [Legiscan API](https://legiscan.com/legiscan).
+
+It is still very much a work in progress, as is this documentation.
 
 Created by [Tyler Dukes](https://github.com/mtdukes), WRAL.
 
@@ -20,26 +22,26 @@ Update database with ```git pull```.
 
 ## Current scripts
 
-A rundown of the scripts that manage data in Venus. Most of these can run in the crontab with ```sudo nano /etc/crontab```. Need to move these into Django utils. 
+A rundown of the scripts that manage data in Venus. Most of these can run in the crontab with ```sudo nano /etc/crontab```. Need to move these into Django utils, [per issue No. 3](https://github.com/wraldata/venus/issues/3). 
 
 Workflow:
 
 ```loadLawmakers.py > voteGen.py```
 
-```get_new_bills.py > loadBills.py > loadVotes.py > lawmakerStats.py```
+```getChanges.py > loadBills.py > loadVotes.py > lawmakerStats.py```
 
-### getChanges.py
+#### getChanges.py
 
 A python script to download a new Master File from the Legiscan API and check against our application's existing master file for any bill changes using the change hash. Currently checks for old file in ```data/master_file_old.json```.
 
 Usage:
 
 ```bash
-python get_new_bills.py
+python getChanges.py
 
 ```
 
-### loadLawmakers.py
+#### loadLawmakers.py
 Uses a centralized dataset of sitting North Carolina lawmakers maintained by WRAL to load new lawmakers into the database. Need to determine frequency to run this script in crontab.
 
 Usage:
@@ -51,7 +53,7 @@ python loadLawmakers.py
 
 ```
 
-### loadBills.py
+#### loadBills.py
 Uses data downloaded to ```data/bills``` to load new legislation into database.
 
 Usage:
@@ -63,7 +65,7 @@ python loadBills.py
 
 ```
 
-### loadVotes.py
+#### loadVotes.py
 Uses data downloaded to ```data/votes``` to load new rollcall votes into database.
 
 Usage:
@@ -75,7 +77,7 @@ python loadVotes.py
 
 ```
 
-### lawmakerStats.py
+#### lawmakerStats.py
 Uses data from rollcall votes to calculate part loyalty score and missed vote totals for each sitting North Carolina lawmaker.
 
 Usage:
@@ -87,7 +89,7 @@ python lawmakerStats.py
 
 ```
 
-### voteGen.py
+#### voteGen.py
 Utility function to generate four voting options for each lawmaker ('yea','nay','not voting','absent').
 
 Usage:
@@ -99,7 +101,7 @@ python voteGen.py
 
 ```
 
-## LICENSE
+### LICENSE
 
 Released under [MIT license](https://github.com/wraldata/venus/blob/master/LICENSE)
 
