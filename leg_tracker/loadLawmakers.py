@@ -30,7 +30,7 @@ def load_lawmakers():
 					party = d['party'],
 					position = d['title'],
 					member_id = d['ncleg_id'],
-					headshot = d['headshot'],
+					headshot = 'https://wral.com' + d['headshot'],
 					district = d['district'],
 					county_short = d['county_short'],
 					phone = d['phone'],
