@@ -39,10 +39,11 @@ def calc_votes():
 
 	#create array of dem lawmakers and gop lawmakers
 	for lawmaker in lawmaker_data:
-		if lawmaker['party'] == "D":
-			dem_list.append(lawmaker['url'])
-		elif lawmaker['party'] == "R":
-			gop_list.append(lawmaker['url'])
+		if lawmaker['active'] != False or lawmaker['active'] is not None or lawmaker['active'] != '':
+			if lawmaker['party'] == "D":
+				dem_list.append(lawmaker['url'])
+			elif lawmaker['party'] == "R":
+				gop_list.append(lawmaker['url'])
 
 	print "...lawmakers loaded and filed"
 
