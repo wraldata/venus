@@ -20,7 +20,7 @@ class Lawmaker(models.Model):
 	party_votes = models.IntegerField(default=0, help_text="Number of votes that lined up with the majority of this member party.")
 	missed_votes = models.IntegerField(default=0, help_text="Number of votes either missed or marked not voting.")
 	vote_opportunities = models.IntegerField(default=0, help_text="Number of voting opportunities for this member.")
-	active = models.BooleanField(help_text='Indicates whether member is an active legislator.')
+	active = models.NullBooleanField(help_text='Indicates whether member is an active legislator.')
 	updated = models.DateTimeField(auto_now=True)
 
 class Bill(models.Model):

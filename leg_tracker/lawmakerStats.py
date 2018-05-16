@@ -112,7 +112,6 @@ def calc_votes():
 						missed_votes += 1
 		print lawmaker['name'] + " votes: " + str(party_votes) + "/" + str(total_votes)
 		print lawmaker['name'] + " missed votes: " + str(missed_votes) + "/" + str(vote_opps)
-		print lawmaker['active']
 		
 		#add calculated values to dem/gop array so we can calculate party info later
 		#check for zero values in denominator to prevent float errors
