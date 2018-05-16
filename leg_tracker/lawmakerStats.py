@@ -17,10 +17,10 @@ django.setup()
 #load your models
 from billcatcher.models import Lawmaker, Party
 
-lawmaker_url = 'http://52.22.90.29/lawmakers/?format=json'
+lawmaker_url = 'http://venus.wral.com/lawmakers/?format=json'
 #for testing
 #rollcall_url = 'http://52.22.90.29/rollcalls/?format=json&bill_identifier=3540'
-rollcall_url = 'http://52.22.90.29/rollcalls/?format=json'
+rollcall_url = 'http://venus.wral.com/rollcalls/?format=json'
 
 #global variables to be used in other calculations
 dem_missed = []
