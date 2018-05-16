@@ -4,6 +4,8 @@ A python script (version 2.0 of get_new_bills.py) to download a new Master File 
 against our application's existing master file for any bill changes.
 Currently checks for old file in data/master_file_old.json
 
+We periodically need to update with new session dates
+
 Usage:
 python getChanges.py
 '''
@@ -29,7 +31,8 @@ def get_sessionList():
 		session_data = urllib.urlopen(session_url).read()
 		session_json = json.loads(session_data)
 		for session in session_json['sessions']:
-			if session['year_start'] == 2015 or session['year_end'] == 2016:
+			#Update session year here
+			if session['year_start'] == 2015 or session['year_end'] == 2016 or session['year_end'] == 2017 or session['year_end'] == 2018:
 				session_list.append(session['session_id'])
 	except:
 		print 'ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now())
