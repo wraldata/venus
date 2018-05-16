@@ -32,6 +32,10 @@ def calc_votes():
 	#load lawmaker data
 	lawmaker_response = urllib.urlopen(lawmaker_url)
 	lawmaker_data = json.loads(lawmaker_response.read())
+	# Filter python objects with list comprehensions
+	output_dict = [x for x in lawmaker_data if x['active'] == True]
+	# Transform python object back into json
+	lawmaker_data = json.dumps(output_dict)
 	dem_list = []
 	gop_list = []
 	dem_record = {}
@@ -39,11 +43,10 @@ def calc_votes():
 
 	#create array of dem lawmakers and gop lawmakers
 	for lawmaker in lawmaker_data:
-		if lawmaker['active'] != False or lawmaker['active'] is not None or lawmaker['active'] != '':
-			if lawmaker['party'] == "D":
-				dem_list.append(lawmaker['url'])
-			elif lawmaker['party'] == "R":
-				gop_list.append(lawmaker['url'])
+		if lawmaker['party'] == "D":
+			dem_list.append(lawmaker['url'])
+		elif lawmaker['party'] == "R":
+			gop_list.append(lawmaker['url'])
 
 	print "...lawmakers loaded and filed"
 
