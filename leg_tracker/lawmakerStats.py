@@ -32,10 +32,11 @@ def calc_votes():
 	#load lawmaker data
 	lawmaker_response = urllib.urlopen(lawmaker_url)
 	lawmaker_data = json.loads(lawmaker_response.read())
-	# Filter python objects with list comprehensions
-	output_dict = [x for x in lawmaker_data if x['active'] == True]
-	# Transform python object back into json
-	lawmaker_data = json.dumps(output_dict)
+	lawmaker_clean = [];
+	for lawmaker in lawmaker_data:
+		if lawmaker['active'] == True:
+			lawmaker_clean.append(lawmaker)
+	lawmaker_data = lawmaker_clean
 	dem_list = []
 	gop_list = []
 	dem_record = {}
