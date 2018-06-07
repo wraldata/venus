@@ -1,6 +1,6 @@
 '''
 getChanges.py
-A python script (version 2.0 of get_new_bills.py) to download a new Master File from the Legiscan API and check 
+A python script (version 2.0 of get_new_bills.py) to download a new Master File from the Legiscan API and check
 against our application's existing master file for any bill changes.
 Currently checks for old file in data/master_file_old.json
 
@@ -14,7 +14,7 @@ import urllib, json
 import datetime, os
 
 #API key for your Legiscan account (contained in gitignored directory)
-legiscan_key = open('./keys/.legiscan_key','r').read()
+legiscan_key = open('./keys/.legiscan_key','r').read().rstrip('\n')
 
 #ncleg.net url format
 #will need to update for current year
@@ -34,8 +34,8 @@ def get_sessionList():
 			#Update session year here
 			if session['year_start'] == 2015 or session['year_end'] == 2016 or session['year_end'] == 2017 or session['year_end'] == 2018:
 				session_list.append(session['session_id'])
-	except:
-		print 'ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now())
+	except Exception as e:
+		print 'ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now()) + ' ' + str(e)
 	return session_list
 
 #define function to get master lists with specificed session ids

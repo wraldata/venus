@@ -15,7 +15,7 @@ import json, os, urllib, sys
 
 from billcatcher.models import Lawmaker
 
-url = 'http://www.wral.com/news/state/nccapitol/data_set/14376504/?dsi_id=ncga-eid&version=jsonObj'
+url = 'https://www.wral.com/news/state/nccapitol/data_set/14376504/?dsi_id=ncga-eid&version=jsonObj'
 
 def load_lawmakers():
 	response = urllib.urlopen(url)
@@ -41,8 +41,9 @@ def load_lawmakers():
 					eid = d['eid'],
 					active = str(1)
 					)
-			except:
+			except Exception as e:
 				print "Unexpected error:",d['member'],sys.exc_info()[0]
+				print str(e)
 
 if __name__ == '__main__':
 	load_lawmakers()
