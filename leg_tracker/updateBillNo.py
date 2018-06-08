@@ -19,7 +19,7 @@ rollcall_url = 'http://localhost/rollcalls/?format=json'
 
 #load all rollcall votes
 try:
-	rollcall_response = urllib2.urlopen(rollcall_url, , None, 300)
+	rollcall_response = urllib2.urlopen(rollcall_url, None, 300)
 except urllib2.URLError, e:
 	raise Exception("There was an error: %r" % e)
 
