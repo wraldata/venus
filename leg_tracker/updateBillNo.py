@@ -8,17 +8,21 @@ export DJANGO_SETTINGS_MODULE=leg_tracker.settings
 python updateBillNo.py
 '''
 
-import json, os, urllib, re
+import json, os, urllib2, re
 
 import django
 django.setup()
 
 from billcatcher.models import Bill, Rollcall
 
-rollcall_url = 'http://52.22.90.29/rollcalls/?format=json'
+rollcall_url = 'http://localhost/rollcalls/?format=json'
 
 #load all rollcall votes
-rollcall_response = urllib.urlopen(rollcall_url)
+try:
+	rollcall_response = urllib2.urlopen(rollcall_url, , None, 300)
+except urllib2.URLError, e:
+	raise Exception("There was an error: %r" % e)
+
 rollcall_data = json.loads(rollcall_response.read())
 
 #for each vote:
