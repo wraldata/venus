@@ -9,7 +9,7 @@ python lawmakerStats.py
 By Tyler Dukes, WRAL
 '''
 
-import json, os, urllib, re
+import json, os, urllib2, re
 
 import django
 django.setup()
@@ -17,10 +17,10 @@ django.setup()
 #load your models
 from billcatcher.models import Lawmaker, Party
 
-lawmaker_url = 'http://venus.wral.com/lawmakers/?format=json'
+lawmaker_url = 'https://venus.wral.com/lawmakers/?format=json'
 #for testing
 #rollcall_url = 'http://52.22.90.29/rollcalls/?format=json&bill_identifier=3540'
-rollcall_url = 'http://venus.wral.com/rollcalls/?format=json'
+rollcall_url = 'http://localhost/rollcalls/?format=json'
 
 #global variables to be used in other calculations
 dem_missed = []
@@ -30,7 +30,7 @@ gop_loyalty = []
 
 def calc_votes():
 	#load lawmaker data
-	lawmaker_response = urllib.urlopen(lawmaker_url)
+	lawmaker_response = urllib2.urlopen(lawmaker_url)
 	lawmaker_data = json.loads(lawmaker_response.read())
 	lawmaker_clean = [];
 	for lawmaker in lawmaker_data:
@@ -52,7 +52,11 @@ def calc_votes():
 	print "...lawmakers loaded and filed"
 
 	#load all rollcall votes
-	rollcall_response = urllib.urlopen(rollcall_url)
+	try:
+		rollcall_response = urllib2.urlopen(rollcall_url, , None, 300)
+	except urllib2.URLError, e:
+		raise Exception("There was an error: %r" % e)
+
 	rollcall_data = json.loads(rollcall_response.read())
 
 	print "...rollcall data loaded"
@@ -112,7 +116,7 @@ def calc_votes():
 						missed_votes += 1
 		print lawmaker['name'] + " votes: " + str(party_votes) + "/" + str(total_votes)
 		print lawmaker['name'] + " missed votes: " + str(missed_votes) + "/" + str(vote_opps)
-		
+
 		#add calculated values to dem/gop array so we can calculate party info later
 		#check for zero values in denominator to prevent float errors
 		if lawmaker['party'] == "D":
