@@ -29,7 +29,7 @@ rollcall_data = json.loads(rollcall_response.read())
 for vote in rollcall_data:
 	#get the bill identifier
 	bill_url = vote['bill_identifier']
-	bill_response = urllib.urlopen(bill_url + '?format=json')
+	bill_response = urllib2.urlopen(bill_url + '?format=json')
 	bill_data = json.loads(bill_response.read())
 
 	print 'Bill number:' + bill_data['bill_number']
