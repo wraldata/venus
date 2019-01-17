@@ -31,8 +31,8 @@ def get_sessionList():
 		session_data = urllib.urlopen(session_url).read()
 		session_json = json.loads(session_data)
 		for session in session_json['sessions']:
-			#Update session year here
-			if session['year_start'] == 2015 or session['year_end'] == 2016 or session['year_end'] == 2017 or session['year_end'] == 2018:
+			#Capturing all sessions from 2015 on
+			if session['year_start'] >= 2015:
 				session_list.append(session['session_id'])
 	except Exception as e:
 		print 'ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now()) + ' ' + str(e)
