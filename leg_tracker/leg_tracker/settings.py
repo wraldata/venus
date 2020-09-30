@@ -77,7 +77,10 @@ MIDDLEWARE_CLASSES = (
 CORS_ORIGIN_WHITELIST = (
     'http://wral-pubtools.cbcnewmedia.com',
     'http://wral.com',
-    'http://www.wral.com'
+    'http://www.wral.com',
+    'https://wral-pubtools.cbcnewmedia.com',
+    'https://wral.com',
+    'https://www.wral.com'
     )
 
 ROOT_URLCONF = 'leg_tracker.urls'
