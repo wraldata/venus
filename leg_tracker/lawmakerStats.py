@@ -9,7 +9,10 @@ python lawmakerStats.py
 By Tyler Dukes, WRAL
 '''
 
-import json, os, urllib2, re
+import json, os, re
+
+import urllib.request
+import urllib.error
 
 import django
 django.setup()
@@ -30,7 +33,7 @@ gop_loyalty = []
 
 def calc_votes():
 	#load lawmaker data
-	lawmaker_response = urllib2.urlopen(lawmaker_url)
+	lawmaker_response = urllib.request.urlopen(lawmaker_url)
 	lawmaker_data = json.loads(lawmaker_response.read())
 	lawmaker_clean = [];
 	for lawmaker in lawmaker_data:
@@ -49,17 +52,17 @@ def calc_votes():
 		elif lawmaker['party'] == "R":
 			gop_list.append(lawmaker['url'])
 
-	print "...lawmakers loaded and filed"
+	print("...lawmakers loaded and filed")
 
 	#load all rollcall votes
 	try:
-		rollcall_response = urllib2.urlopen(rollcall_url, None, 300)
-	except urllib2.URLError, e:
+		rollcall_response = urllib.request.urlopen(rollcall_url, None, 300)
+	except urllib.error.URLError as e:
 		raise Exception("There was an error: %r" % e)
 
 	rollcall_data = json.loads(rollcall_response.read())
 
-	print "...rollcall data loaded"
+	print("...rollcall data loaded")
 
 	#for each vote:
 	#calculate majority vote of dems
@@ -114,8 +117,8 @@ def calc_votes():
 					elif v['vote_code'] == 3 or v['vote_code'] == 4:
 						vote_opps += 1
 						missed_votes += 1
-		print lawmaker['name'] + " votes: " + str(party_votes) + "/" + str(total_votes)
-		print lawmaker['name'] + " missed votes: " + str(missed_votes) + "/" + str(vote_opps)
+		print(lawmaker['name'] + " votes: " + str(party_votes) + "/" + str(total_votes))
+		print(lawmaker['name'] + " missed votes: " + str(missed_votes) + "/" + str(vote_opps))
 
 		#add calculated values to dem/gop array so we can calculate party info later
 		#check for zero values in denominator to prevent float errors
@@ -179,4 +182,4 @@ def calc_average(values):
 
 if __name__ == '__main__':
 	calc_votes()
-	print "...lawmakers stats updated"
+	print("...lawmakers stats updated")

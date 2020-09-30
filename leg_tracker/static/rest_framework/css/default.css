@@ -1,9 +1,8 @@
-
 /* The navbar is fixed at >= 980px wide, so add padding to the body to prevent
 content running up underneath it. */
 
 h1 {
-  font-weight: 500;
+  font-weight: 300;
 }
 
 h2, h3 {
@@ -31,6 +30,14 @@ h2, h3 {
 .button-form {
   float: right;
   margin-right: 1em;
+}
+
+td.nested {
+  padding: 0 !important;
+}
+
+td.nested > table {
+  margin: 0;
 }
 
 form select, form input, form textarea {
@@ -64,4 +71,12 @@ pre {
 .page-header {
   border-bottom: none;
   padding-bottom: 0px;
+}
+
+#filtersModal form input[type=submit] {
+    width: auto;
+}
+
+#filtersModal .modal-body h2 {
+    margin-top: 0
 }

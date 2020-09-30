@@ -16,7 +16,6 @@ import os
 #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -24,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = open(os.path.join(BASE_DIR,'../keys/.django_key'),'r').read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -34,7 +33,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
-    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
 
@@ -49,8 +48,19 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'billcatcher',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_filters'
 )
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,9 +75,9 @@ MIDDLEWARE_CLASSES = (
 )
 
 CORS_ORIGIN_WHITELIST = (
-    'wral-pubtools.cbcnewmedia.com',
-    'wral.com',
-    'www.wral.com'
+    'http://wral-pubtools.cbcnewmedia.com',
+    'http://wral.com',
+    'http://www.wral.com'
     )
 
 ROOT_URLCONF = 'leg_tracker.urls'
@@ -123,11 +133,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # generate https urls if running behind cloudfront
 # https://www.tibobeijen.nl/2017/10/26/django-https-urls-cloudfront/
-SECURE_PROXY_SSL_HEADER = ('HTTP_CLOUDFRONT_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SECURE_SSL_HOST = 'venus.wral.com'
-SECURE_REDIRECT_EXEMPT = (
-    '/rollcalls/'
-)
+
+#SECURE_PROXY_SSL_HEADER = ('HTTP_CLOUDFRONT_FORWARDED_PROTO', 'https')
+#SECURE_SSL_REDIRECT = True
+#SECURE_SSL_HOST = 'venus.wral.com'
+#SECURE_REDIRECT_EXEMPT = (
+#    '/rollcalls/'
+#)
 
 LOGIN_REDIRECT_URL = '/admin/'

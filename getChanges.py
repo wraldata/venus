@@ -10,8 +10,11 @@ Usage:
 python getChanges.py
 '''
 
-import urllib, json
+import json
+import urllib.request
 import datetime, os
+from os import listdir
+from os.path import isfile, join
 
 #API key for your Legiscan account (contained in gitignored directory)
 legiscan_key = open('./keys/.legiscan_key','r').read().rstrip('\n')
@@ -28,14 +31,14 @@ def get_sessionList():
 	session_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getSessionList&state=NC'
 	session_list = []
 	try:
-		session_data = urllib.urlopen(session_url).read()
+		session_data = urllib.request.urlopen(session_url).read()
 		session_json = json.loads(session_data)
 		for session in session_json['sessions']:
 			#Capturing all sessions from 2015 on
 			if session['year_start'] >= 2015:
 				session_list.append(session['session_id'])
 	except Exception as e:
-		print 'ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now()) + ' ' + str(e)
+		print('ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now()) + ' ' + str(e))
 	return session_list
 
 #define function to get master lists with specificed session ids
@@ -51,7 +54,7 @@ def get_masters(session_list):
 	#read in master list with each session id
 	for url in url_list:
 		#open the url and load in the json
-		current_session = json.loads(urllib.urlopen(url).read())
+		current_session = json.loads(urllib.request.urlopen(url).read())
 		for item in current_session['masterlist']:
 			if item != 'session':
 				#append to master list object
@@ -74,35 +77,72 @@ def get_bill_updates():
 
 	#open the old file
 	#need to build in exception for if it doesn't exist
-	with open('data/master_file_old.json') as old_file:
-		old_data = json.load(old_file)
+	if (os.path.isfile('data/master_file_old.json')):
+		with open('data/master_file_old.json') as old_file:
+			old_data = json.load(old_file)
+	else:
+		master_log.write('ALERT: No master file detected. Starting new one.\n')
+		old_data = 0;
 
-	#initialize the counter
+	#initialize the counters
 	change_count = 0
+	unchanged_count = 0
+	undled_count = 0
 	#create empty list to store bills
 	changed_bills = []
+	unchanged_bills = []
+	undled_bills = []
+
+	dl_bills = [f.split('.')[0] for f in listdir('data/bills/') if isfile(join('data/bills/', f))]
+	dl_rollcalls = [f.split('.')[0] for f in listdir('data/votes/') if isfile(join('data/votes/', f))]
 
 	for item in master_data:
-		try:
-			#check for altered change_hash
-			if (master_data[item]['change_hash'] != old_data[item]['change_hash']):
-				change_count += 1
-				changed_bills.append(item)
-		#if it throws a key error, the bill is new, so add it
-		except KeyError:
+		#check for a blank file
+		if(old_data == 0):
 			change_count += 1
 			changed_bills.append(item)
-	master_log.write('ALERT: ' + str(change_count) + ' bills have been updated\n')
+		#otherwise go through the old file and compare
+		else:
+			try:
+				#check for altered change_hash
+				if (master_data[item]['change_hash'] != old_data[item]['change_hash']):
+					change_count += 1
+					changed_bills.append(item)
+				else:
+					unchanged_count += 1
+					unchanged_bills.append(item)
+			#if it throws a key error, the bill is new, so add it
+			except KeyError:
+				change_count += 1
+				changed_bills.append(item)
+		#check on our undownloaded bills...
+		if(str(master_data[item]['bill_id']) not in dl_bills):
+			undled_count += 1
+			undled_bills.append(item)
+	master_log.write('ALERT: ' + str(unchanged_count) + ' bills have stayed the same in Legiscan data\n')
+	master_log.write('ALERT: ' + str(change_count) + ' bills have been updated in Legiscan data\n')
+	master_log.write('ALERT: ' + str(undled_count) + ' bills have not been downloaded yet\n')
 	for bill in changed_bills:
 		get_bill(master_data[bill]['bill_id'],master_data[bill]['number'])
 		get_rollcall(master_data[bill]['bill_id'])
+	#temporary maintenance steps that should normally be disabled
+	#for bill in undled_bills:
+	#	get_bill(master_data[bill]['bill_id'],master_data[bill]['number'])
+	#	get_rollcall(master_data[bill]['bill_id'])
+	#delete this after maintencance
+	#for bill in unchanged_bills:
+	#	get_rollcall(master_data[bill]['bill_id'])
 
 #function to get a specific bill, by defined id
 def get_bill(bill_id, name):
 	bill_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getBill&id=' + str(bill_id)
-	bill_file = urllib.URLopener()
+	#bill_file = urllib.request.URLopener()
 	try:
-		bill_file.retrieve(bill_url, 'data/bills/' + str(bill_id) + '.json')
+		#bill_file.retrieve(bill_url, 'data/bills/' + str(bill_id) + '.json')
+		bill_file = urllib.request.urlopen(bill_url).read()
+		f = open('data/bills/' + str(bill_id) + '.json', 'wb')
+		f.write(bill_file)
+		f.close()
 		master_log.write(name + ' data saved at ' + str(datetime.datetime.now()) + '\n')
 	except:
 		master_log.write('ERROR: Invalid bill file URL\n')
@@ -125,9 +165,13 @@ def get_rollcall(bill_id):
 			#if not, then download it
 		else:
 			rollcall_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getRollCall&id=' + str(rollcall_id)
-			rollcall_file = urllib.URLopener()
+			#rollcall_file = urllib.request.URLopener()
 			try:
-				rollcall_file.retrieve(rollcall_url,'data/votes/' + str(rollcall_id) + '.json')
+				#rollcall_file.retrieve(rollcall_url,'data/votes/' + str(rollcall_id) + '.json')
+				rollcall_file = urllib.request.urlopen(rollcall_url).read()
+				f = open('data/votes/' + str(rollcall_id) + '.json', 'wb')
+				f.write(rollcall_file)
+				f.close()
 				master_log.write('Rollcall ' + str(rollcall_id) + ' saved at ' + str(datetime.datetime.now()) + '\n')
 			except:
 				master_log.write('ERROR: Invalid rollcall file URL\n')

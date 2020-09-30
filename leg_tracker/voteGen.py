@@ -1,4 +1,5 @@
-import json, os, urllib
+import json, os
+import urllib.request
 
 import django
 django.setup()
@@ -9,12 +10,12 @@ url = 'http://www.wral.com/news/state/nccapitol/data_set/14376504/?dsi_id=ncga-e
 
 def generate_votes():
 	text = ['Yea','Nay','NV','Absent']
-	response = urllib.urlopen(url)
+	response = urllib.request.urlopen(url)
 	data = json.loads(response.read())
 
 	for d in data:
 		if d['legiscan_id'] != str(0) and d['legiscan_id'] != '':
-			print d['legiscan_id']
+			print(d['legiscan_id'])
 			for x in range(1,5):
 				Vote.objects.get_or_create(
 					vote_id = int(str(d['legiscan_id']) + str(x)),
@@ -25,4 +26,4 @@ def generate_votes():
 
 if __name__ == '__main__':
 	generate_votes()
-	print "...votes generated"
+	print("...votes generated")

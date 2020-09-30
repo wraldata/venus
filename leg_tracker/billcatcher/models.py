@@ -20,7 +20,7 @@ class Lawmaker(models.Model):
 	party_votes = models.IntegerField(default=0, help_text="Number of votes that lined up with the majority of this member party.")
 	missed_votes = models.IntegerField(default=0, help_text="Number of votes either missed or marked not voting.")
 	vote_opportunities = models.IntegerField(default=0, help_text="Number of voting opportunities for this member.")
-	active = models.NullBooleanField(help_text='Indicates whether member is an active legislator.')
+	active = models.BooleanField(null=True, help_text='Indicates whether member is an active legislator.')
 	updated = models.DateTimeField(auto_now=True)
 
 class Bill(models.Model):
@@ -41,14 +41,14 @@ class Bill(models.Model):
 
 class Vote(models.Model):
 	vote_id = models.IntegerField(default=0, primary_key=True)
-	member = models.ForeignKey(Lawmaker)
+	member = models.ForeignKey(Lawmaker, on_delete=models.CASCADE)
 	vote_code = models.IntegerField(default=0)
 	vote_text = models.CharField(max_length=10)
 	def __str__(self):
 		return str(self.member) + ': ' + self.vote_text
 
 class Rollcall(models.Model):
-	bill_identifier = models.ForeignKey(Bill)
+	bill_identifier = models.ForeignKey(Bill, on_delete=models.CASCADE)
 	bill_number = models.CharField(default='',max_length=5)
 	rollcall_id = models.CharField(max_length=15)
 	date = models.DateField('date of vote')

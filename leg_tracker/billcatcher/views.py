@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework import filters, generics
+from django_filters import rest_framework as filters
 from billcatcher.models import Bill, Lawmaker, Vote, Rollcall, Party
 from billcatcher.serializers import BillSerializer, LawmakerSerializer, VoteSerializer, RollcallSerializer, PartySerializer
 
@@ -9,7 +9,7 @@ class BillViewSet(viewsets.ModelViewSet):
     #setup for filters
     #NOTE: True/False must be in sentence case
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('watch','bill_id','bill_number','sponsors')
+    filterset_fields = ('watch','bill_id','bill_number','sponsors')
 
 class LawmakerViewSet(viewsets.ModelViewSet):
     queryset = Lawmaker.objects.all()
@@ -23,7 +23,7 @@ class RollcallViewSet(viewsets.ModelViewSet):
     queryset = Rollcall.objects.all()
     serializer_class = RollcallSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('bill_identifier','rollcall_id','desc','passed')
+    filterset_fields = ('bill_identifier','rollcall_id','desc','passed')
 
 class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()

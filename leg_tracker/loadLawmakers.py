@@ -11,21 +11,25 @@
 #
 # By Tyler Dukes, WRAL
 
-import json, os, urllib, sys
+import json, os, sys
+import urllib.request
+
+import django
+django.setup()
 
 from billcatcher.models import Lawmaker
 
 url = 'https://www.wral.com/news/state/nccapitol/data_set/14376504/?dsi_id=ncga-eid&version=jsonObj'
 
 def load_lawmakers():
-	response = urllib.urlopen(url)
+	response = urllib.request.urlopen(url)
 	data = json.loads(response.read())
 
 	for d in data:
 		if d['legiscan_id'] != str(0) and d['legiscan_id'] != '':
-			print d['legiscan_id']
+			print(d['legiscan_id'])
 			try:
-				Lawmaker.objects.get_or_create(
+				Lawmaker.objects.update_or_create(
 					name = d['member'],
 					party = d['party'],
 					position = d['title'],
@@ -42,9 +46,9 @@ def load_lawmakers():
 					active = str(1)
 					)
 			except Exception as e:
-				print "Unexpected error:",d['member'],sys.exc_info()[0]
-				print str(e)
+				print("Unexpected error:",d['member'],sys.exc_info()[0])
+				print(str(e))
 
 if __name__ == '__main__':
 	load_lawmakers()
-	print "...lawmakers loaded"
+	print("...lawmakers loaded")
