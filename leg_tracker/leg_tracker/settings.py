@@ -53,6 +53,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,9 +63,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
+MIDDLEWARE_CLASSES = [
     'corsheaders.middleware.CorsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -72,16 +73,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-)
+]
 
-CORS_ORIGIN_WHITELIST = (
-    'http://wral-pubtools.cbcnewmedia.com',
-    'http://wral.com',
-    'http://www.wral.com',
-    'https://wral-pubtools.cbcnewmedia.com',
-    'https://wral.com',
-    'https://www.wral.com'
-    )
+#CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^http[s]{0,1}://\w+\.wral\.com$",
+    r"^http[s]{0,1}://\w+\.cbcnewmedia\.com$",
+]
 
 ROOT_URLCONF = 'leg_tracker.urls'
 
