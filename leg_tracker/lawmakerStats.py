@@ -23,7 +23,9 @@ from billcatcher.models import Lawmaker, Party
 lawmaker_url = 'https://venus.wral.com/lawmakers/?format=json'
 #for testing
 #rollcall_url = 'http://52.22.90.29/rollcalls/?format=json&bill_identifier=3540'
-rollcall_url = 'https://venus.wral.com/localhost/rollcalls/?format=json'
+# the rollcall endpoint is slow and returns a large dataset, so
+# to avoid AWS ALB timeouts, call this endpoint using http://localhost
+rollcall_url = 'http://localhost/rollcalls/?format=json'
 
 #global variables to be used in other calculations
 dem_missed = []
