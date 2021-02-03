@@ -19,10 +19,6 @@ from os.path import isfile, join
 #API key for your Legiscan account (contained in gitignored directory)
 legiscan_key = open('./keys/.legiscan_key','r').read().rstrip('\n')
 
-#ncleg.net url format
-#will need to update for current year
-ncleg_bill = 'http://www.ncleg.net/gascripts/BillLookUp/BillLookUp.pl?Session=2015&BillID='
-
 #open a log for writing
 master_log = open('master_log.txt', 'a')
 
@@ -31,11 +27,12 @@ def get_sessionList():
 	session_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getSessionList&state=NC'
 	session_list = []
 	try:
+		print('[api call]: ' + str(session_url))
 		session_data = urllib.request.urlopen(session_url).read()
 		session_json = json.loads(session_data)
 		for session in session_json['sessions']:
-			#Capturing all sessions from 2015 on
-			if session['year_start'] >= 2015:
+			#Capturing all sessions from 2021 on
+			if session['year_start'] >= 2021:
 				session_list.append(session['session_id'])
 	except Exception as e:
 		print('ERROR: Something went wrong with retrieving the sessionList at ' + str(datetime.datetime.now()) + ' ' + str(e))
@@ -54,6 +51,7 @@ def get_masters(session_list):
 	#read in master list with each session id
 	for url in url_list:
 		#open the url and load in the json
+		print('[api call]: ' + str(url))
 		current_session = json.loads(urllib.request.urlopen(url).read())
 		for item in current_session['masterlist']:
 			if item != 'session':
@@ -136,9 +134,9 @@ def get_bill_updates():
 #function to get a specific bill, by defined id
 def get_bill(bill_id, name):
 	bill_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getBill&id=' + str(bill_id)
-	#bill_file = urllib.request.URLopener()
+
 	try:
-		#bill_file.retrieve(bill_url, 'data/bills/' + str(bill_id) + '.json')
+		print('[api call]: ' + str(bill_url))
 		bill_file = urllib.request.urlopen(bill_url).read()
 		f = open('data/bills/' + str(bill_id) + '.json', 'wb')
 		f.write(bill_file)
@@ -167,6 +165,7 @@ def get_rollcall(bill_id):
 			rollcall_url = 'https://api.legiscan.com/?key=' + legiscan_key + '&op=getRollCall&id=' + str(rollcall_id)
 			#rollcall_file = urllib.request.URLopener()
 			try:
+				print('[api call]: ' + str(rollcall_url))
 				#rollcall_file.retrieve(rollcall_url,'data/votes/' + str(rollcall_id) + '.json')
 				rollcall_file = urllib.request.urlopen(rollcall_url).read()
 				f = open('data/votes/' + str(rollcall_id) + '.json', 'wb')
